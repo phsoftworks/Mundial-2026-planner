@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="theme-color"
+    content="#0b3d91"
+  >
+
+  <title>World Cup 2026 Planner</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <link
+    rel="manifest"
+    href="manifest.json"
+  >
+
+</head>
+
+<body>
+
+  <div id="splash">
+    🏆 World Cup 2026
+  </div>
+
+  <div class="container">
+
+    <section class="hero">
+
+      <h1>
+        🏆 World Cup Planner 2026
+      </h1>
+
+      <p>
+        Canadá 🇨🇦 · Estados Unidos 🇺🇸 · México 🇲🇽
+      </p>
+
+    </section>
+
+    <section class="stats">
+
+      <div class="stat-card">
+
+        <h3 id="totalMatches">
+          0
+        </h3>
+
+        <p>
+          Partidos
+        </p>
+
+      </div>
+
+      <div class="stat-card">
+
+        <h3 id="favoriteMatches">
+          0
+        </h3>
+
+        <p>
+          Favoritos
+        </p>
+
+      </div>
+
+      <div class="stat-card">
+
+        <h3 id="watchedMatches">
+          0
+        </h3>
+
+        <p>
+          Vistos
+        </p>
+
+      </div>
+
+    </section>
+
+    <section class="controls">
+
+      <input
+        id="searchInput"
+        placeholder="Buscar selección..."
+      >
+
+      <button
+        onclick="requestNotifications()"
+      >
+        🔔 Activar avisos
+      </button>
+
+    </section>
+
+    <section class="matches-section">
+
+      <h2>
+        ⚽ Partidos
+      </h2>
+
+      <div id="matchList"></div>
+
+    </section>
+
+    <section class="calendar-section">
+
+      <div class="calendar-header">
+
+        <button onclick="prevMonth()">
+          ◀
+        </button>
+
+        <h2 id="monthTitle"></h2>
+
+        <button onclick="nextMonth()">
+          ▶
+        </button>
+
+      </div>
+
+      <div id="calendar"></div>
+
+    </section>
+
+    <section class="favorites-section">
+
+      <h2>
+        ⭐ Favoritos
+      </h2>
+
+      <div id="favoriteList"></div>
+
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+
+    if ("serviceWorker" in navigator) {
+
+      navigator.serviceWorker.register("sw.js");
+
+    }
+
+    window.addEventListener("load", () => {
+
+      setTimeout(() => {
+
+        document
+          .getElementById("splash")
+          .style.display = "none";
+
+      }, 1000);
+
+    });
+
+  </script>
+
+</body>
+
+</html>
