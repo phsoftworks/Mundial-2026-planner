@@ -245,7 +245,13 @@ function renderMatches() {
   state.matches.forEach(m => {
     const card = document.createElement("div");
     card.className = "match-card";
+const live = onlineDB[state.leagueId]?.liveUpdates?.[m.id];
 
+const scoreHTML = live
+  ? `<div style="color:#ffd54a;font-weight:bold;">
+      🔴 LIVE ${live.home || 0} - ${live.away || 0}
+     </div>`
+  : "";
     const poll = state.db.leagues[state.leagueId].polls[m.id] || { home: 0, draw: 0, away: 0 };
 
     card.innerHTML = `
@@ -255,6 +261,7 @@ function renderMatches() {
           <div class="team">
             <img src="${m.homeFlag}">
             ${m.homeTeam}
+            ${scoreHTML}
           </div>
 
           <div class="vs">VS</div>
@@ -508,3 +515,25 @@ function resolveBets(matchId, correctResult) {
 
   saveDB();
 }
+function simulateGoal(matchId) {
+  const live = onlineDB[state.leagueId]?.liveUpdates?.[matchId] || {
+    home: 0,
+    away: 0
+  };
+
+  const side = Math.random() > 0.5 ? "home" : "away";
+
+  live[side]++;
+
+  updateLiveMatch(matchId, live);
+
+  showToast(`⚽ ¡GOOOOOOL! ${side.toUpperCase()}`);
+}
+setInterval(() => {
+  const randomMatch =
+    state.matches[Math.floor(Math.random() * state.matches.length)];
+
+  if (Math.random() > 0.7) {
+    simulateGoal(randomMatch.id);
+  }
+}, 15000);
