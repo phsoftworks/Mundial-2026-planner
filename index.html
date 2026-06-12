@@ -7,7 +7,7 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
   >
 
   <meta
@@ -15,7 +15,7 @@
     content="#0b3d91"
   >
 
-  <title>World Cup 2026 Planner</title>
+  <title>🏆 World Cup 2026 Planner</title>
 
   <link
     rel="stylesheet"
@@ -31,34 +31,52 @@
 
 <body>
 
+  <!-- SPLASH -->
+
   <div id="splash">
+
     🏆 World Cup 2026
+
   </div>
 
+  <!-- CONTENEDOR -->
+
   <div class="container">
+
+    <!-- HERO -->
 
     <section class="hero">
 
       <h1>
-        🏆 World Cup Planner 2026
+
+        🏆 World Cup Planner
+
       </h1>
 
       <p>
-        Canadá 🇨🇦 · Estados Unidos 🇺🇸 · México 🇲🇽
+
+        Sigue el Mundial 2026 de Canadá 🇨🇦, Estados Unidos 🇺🇸 y México 🇲🇽
+
       </p>
 
     </section>
+
+    <!-- ESTADÍSTICAS -->
 
     <section class="stats">
 
       <div class="stat-card">
 
         <h3 id="totalMatches">
+
           0
+
         </h3>
 
         <p>
+
           Partidos
+
         </p>
 
       </div>
@@ -66,11 +84,15 @@
       <div class="stat-card">
 
         <h3 id="favoriteMatches">
+
           0
+
         </h3>
 
         <p>
+
           Favoritos
+
         </p>
 
       </div>
@@ -78,75 +100,254 @@
       <div class="stat-card">
 
         <h3 id="watchedMatches">
+
           0
+
         </h3>
 
         <p>
+
           Vistos
+
         </p>
 
       </div>
 
     </section>
 
+    <!-- BUSCADOR -->
+
     <section class="controls">
 
       <input
+
         id="searchInput"
-        placeholder="Buscar selección..."
+
+        type="text"
+
+        placeholder="🔍 Buscar selección..."
+
       >
 
       <button
+
         onclick="requestNotifications()"
+
       >
+
         🔔 Activar avisos
+
       </button>
 
     </section>
 
+    <!-- PRÓXIMO PARTIDO -->
+
+    <section class="next-match">
+
+      <h2>
+
+        ⏳ Próximo partido destacado
+
+      </h2>
+
+      <div id="nextMatchCard">
+
+      </div>
+
+    </section>
+
+    <!-- LISTA DE PARTIDOS -->
+
     <section class="matches-section">
 
       <h2>
+
         ⚽ Partidos
+
       </h2>
 
-      <div id="matchList"></div>
+      <div id="matchList">
+
+      </div>
 
     </section>
+        <!-- CALENDARIO -->
 
     <section class="calendar-section">
 
       <div class="calendar-header">
 
         <button onclick="prevMonth()">
+
           ◀
+
         </button>
 
-        <h2 id="monthTitle"></h2>
+        <h2 id="monthTitle">
+
+          Junio 2026
+
+        </h2>
 
         <button onclick="nextMonth()">
+
           ▶
+
         </button>
 
       </div>
 
-      <div id="calendar"></div>
+      <div id="calendar">
+
+      </div>
 
     </section>
+
+    <!-- FAVORITOS -->
 
     <section class="favorites-section">
 
       <h2>
-        ⭐ Favoritos
+
+        ⭐ Partidos favoritos
+
       </h2>
 
-      <div id="favoriteList"></div>
+      <div id="favoriteList">
+
+      </div>
 
     </section>
 
+    <!-- INFORMACIÓN -->
+
+    <section class="info-section">
+
+      <h2>
+
+        🌍 Mundial 2026
+
+      </h2>
+
+      <p>
+
+        Sigue todos los partidos del torneo, guarda tus favoritos,
+        márcalos como vistos y consulta el calendario de un vistazo.
+
+      </p>
+
+    </section>
+<!-- FILTROS -->
+
+<section class="filters-section">
+
+  <h2>
+    🏆 Filtros
+  </h2>
+
+  <div class="filters">
+
+    <select id="phaseFilter">
+
+      <option value="all">
+        Todas las fases
+      </option>
+
+      <option value="groups">
+        Fase de grupos
+      </option>
+
+      <option value="round32">
+        Dieciseisavos
+      </option>
+
+      <option value="round16">
+        Octavos
+      </option>
+
+      <option value="quarterfinals">
+        Cuartos
+      </option>
+
+      <option value="semifinals">
+        Semifinales
+      </option>
+
+      <option value="final">
+        Final
+      </option>
+
+    </select>
+
   </div>
 
+</section>
+
+<!-- CUENTA ATRÁS -->
+
+<section class="countdown-section">
+
+  <h2>
+
+    ⏳ Cuenta atrás
+
+  </h2>
+
+  <div id="countdownCard">
+
+    Calculando...
+
+  </div>
+
+</section>
+
+<!-- COMPARTIR -->
+
+<section class="share-section">
+
+  <button
+    id="shareButton"
+  >
+
+    📤 Compartir aplicación
+
+  </button>
+
+</section>
+
+<!-- INFORMACIÓN -->
+
+<section class="info-section">
+
+  <h2>
+
+    🌎 Sedes oficiales
+
+  </h2>
+
+  <p>
+
+    Canadá 🇨🇦 · Estados Unidos 🇺🇸 · México 🇲🇽
+
+  </p>
+
+  <p>
+
+    Sigue el torneo completo, marca favoritos,
+    consulta el calendario y disfruta de todas
+    las fases del Mundial 2026.
+
+  </p>
+
+</section>
+  </div>
+
+  <!-- SCRIPT -->
+
   <script src="script.js"></script>
+
+  <!-- SERVICE WORKER -->
 
   <script>
 
@@ -160,11 +361,16 @@
 
       setTimeout(() => {
 
-        document
-          .getElementById("splash")
-          .style.display = "none";
+        const splash =
+          document.getElementById("splash");
 
-      }, 1000);
+        if (splash) {
+
+          splash.style.display = "none";
+
+        }
+
+      }, 1200);
 
     });
 
