@@ -1,361 +1,669 @@
-// =====================
-// WORLD CUP 2026 PLANNER
-// =====================
+//////////////////////////////
+// WORLD CUP 2026 APP
+// PARTE 1/3 - BASE COMPLETA
+//////////////////////////////
 
-let currentDate = new Date();
+//////////////////////////////
+// DATOS DEL MUNDIAL
+//////////////////////////////
 
-let matches = JSON.parse(
-  localStorage.getItem("wc2026_matches")
-) || [
-
+const matches = [
+  // GROUP A
   {
     id: 1,
-
-    home: "México",
-
-    away: "TBD",
-
-    date: "2026-06-11",
-
-    time: "20:00",
-
+    group: "A",
+    homeTeam: "Mexico",
+    awayTeam: "South Africa",
+    homeFlag: "flags/mexico.png",
+    awayFlag: "flags/southafrica.png",
+    stage: "Group A",
     stadium: "Estadio Azteca",
+    city: "Mexico City",
+    datetime: "2026-06-11T15:00:00"
+  },
+  {
+    id: 2,
+    group: "A",
+    homeTeam: "South Korea",
+    awayTeam: "Czechia",
+    homeFlag: "flags/southkorea.png",
+    awayFlag: "flags/czechia.png",
+    stage: "Group A",
+    stadium: "Estadio Akron",
+    city: "Guadalajara",
+    datetime: "2026-06-11T22:00:00"
+  },
+  {
+    id: 3,
+    group: "A",
+    homeTeam: "Czechia",
+    awayTeam: "South Africa",
+    homeFlag: "flags/czechia.png",
+    awayFlag: "flags/southafrica.png",
+    stage: "Group A",
+    stadium: "Mercedes-Benz Stadium",
+    city: "Atlanta",
+    datetime: "2026-06-18T12:00:00"
+  },
+  {
+    id: 4,
+    group: "A",
+    homeTeam: "Mexico",
+    awayTeam: "South Korea",
+    homeFlag: "flags/mexico.png",
+    awayFlag: "flags/southkorea.png",
+    stage: "Group A",
+    stadium: "Estadio Akron",
+    city: "Guadalajara",
+    datetime: "2026-06-18T21:00:00"
+  },
+  {
+    id: 5,
+    group: "A",
+    homeTeam: "Czechia",
+    awayTeam: "Mexico",
+    homeFlag: "flags/czechia.png",
+    awayFlag: "flags/mexico.png",
+    stage: "Group A",
+    stadium: "Estadio Azteca",
+    city: "Mexico City",
+    datetime: "2026-06-24T21:00:00"
+  },
+  {
+    id: 6,
+    group: "A",
+    homeTeam: "South Africa",
+    awayTeam: "South Korea",
+    homeFlag: "flags/southafrica.png",
+    awayFlag: "flags/southkorea.png",
+    stage: "Group A",
+    stadium: "Estadio BBVA",
+    city: "Monterrey",
+    datetime: "2026-06-24T21:00:00"
+  },
 
-    favorite: false,
+  // GROUP B
+  {
+    id: 7,
+    group: "B",
+    homeTeam: "Canada",
+    awayTeam: "Bosnia & Herzegovina",
+    homeFlag: "flags/canada.png",
+    awayFlag: "flags/bosnia.png",
+    stage: "Group B",
+    stadium: "BMO Field",
+    city: "Toronto",
+    datetime: "2026-06-12T18:00:00"
+  },
+  {
+    id: 8,
+    group: "B",
+    homeTeam: "Qatar",
+    awayTeam: "Switzerland",
+    homeFlag: "flags/qatar.png",
+    awayFlag: "flags/switzerland.png",
+    stage: "Group B",
+    stadium: "Levi's Stadium",
+    city: "San Francisco",
+    datetime: "2026-06-13T20:00:00"
+  },
+  {
+    id: 9,
+    group: "B",
+    homeTeam: "Switzerland",
+    awayTeam: "Bosnia & Herzegovina",
+    homeFlag: "flags/switzerland.png",
+    awayFlag: "flags/bosnia.png",
+    stage: "Group B",
+    stadium: "SoFi Stadium",
+    city: "Los Angeles",
+    datetime: "2026-06-18T18:00:00"
+  },
+  {
+    id: 10,
+    group: "B",
+    homeTeam: "Canada",
+    awayTeam: "Qatar",
+    homeFlag: "flags/canada.png",
+    awayFlag: "flags/qatar.png",
+    stage: "Group B",
+    stadium: "BC Place",
+    city: "Vancouver",
+    datetime: "2026-06-18T21:00:00"
+  },
+  {
+    id: 11,
+    group: "B",
+    homeTeam: "Switzerland",
+    awayTeam: "Canada",
+    homeFlag: "flags/switzerland.png",
+    awayFlag: "flags/canada.png",
+    stage: "Group B",
+    stadium: "BC Place",
+    city: "Vancouver",
+    datetime: "2026-06-24T18:00:00"
+  },
+  {
+    id: 12,
+    group: "B",
+    homeTeam: "Bosnia & Herzegovina",
+    awayTeam: "Qatar",
+    homeFlag: "flags/bosnia.png",
+    awayFlag: "flags/qatar.png",
+    stage: "Group B",
+    stadium: "Lumen Field",
+    city: "Seattle",
+    datetime: "2026-06-24T21:00:00"
+  },
 
-    watched: false
+  // GROUP C (inicio)
+  {
+    id: 13,
+    group: "C",
+    homeTeam: "Brazil",
+    awayTeam: "Morocco",
+    homeFlag: "flags/brazil.png",
+    awayFlag: "flags/morocco.png",
+    stage: "Group C",
+    stadium: "MetLife Stadium",
+    city: "New York",
+    datetime: "2026-06-13T21:00:00"
+  },
+  {
+    id: 14,
+    group: "C",
+    homeTeam: "Haiti",
+    awayTeam: "Scotland",
+    homeFlag: "flags/haiti.png",
+    awayFlag: "flags/scotland.png",
+    stage: "Group C",
+    stadium: "Gillette Stadium",
+    city: "Boston",
+    datetime: "2026-06-13T18:00:00"
   }
-
 ];
 
-// =====================
-// SAVE
-// =====================
+//////////////////////////////
+// ESTADO (LOCALSTORAGE)
+//////////////////////////////
 
-function save() {
+let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let watched = JSON.parse(localStorage.getItem("watched")) || [];
 
-  localStorage.setItem(
-    "wc2026_matches",
-    JSON.stringify(matches)
-  );
+//////////////////////////////
+// DOM
+//////////////////////////////
 
+const matchList = document.getElementById("matchList");
+
+//////////////////////////////
+// INICIO APP
+//////////////////////////////
+
+document.addEventListener("DOMContentLoaded", () => {
+  hideSplash();
+  renderMatches(matches);
+});
+
+//////////////////////////////
+// RENDER PARTIDOS
+//////////////////////////////
+
+function renderMatches(list) {
+  matchList.innerHTML = "";
+
+  list.forEach(match => {
+    const card = document.createElement("div");
+    card.className = "match-card";
+
+    if (favorites.includes(match.id)) card.classList.add("favorite");
+    if (watched.includes(match.id)) card.classList.add("watched");
+
+    card.innerHTML = `
+      <div class="match-info">
+
+        <div class="teams">
+          <span class="team">
+            <img src="${match.homeFlag}">
+            ${match.homeTeam}
+          </span>
+
+          <span class="vs">VS</span>
+
+          <span class="team">
+            <img src="${match.awayFlag}">
+            ${match.awayTeam}
+          </span>
+        </div>
+
+        <span class="match-stage">${match.stage}</span>
+
+        <div class="match-location">
+          ${match.city} · ${match.stadium}
+        </div>
+
+        <div class="match-time">
+          ⏰ ${new Date(match.datetime).toLocaleString("es-ES")}
+        </div>
+
+      </div>
+
+      <div class="match-actions">
+        <button onclick="toggleFavorite(${match.id})">⭐</button>
+        <button onclick="toggleWatched(${match.id})">👁️</button>
+        <button class="share-btn" onclick="shareMatch(${match.id})">🔗</button>
+      </div>
+    `;
+
+    matchList.appendChild(card);
+  });
 }
 
-// =====================
-// STATS
-// =====================
-
-function updateStats() {
-
-  document.getElementById(
-    "totalMatches"
-  ).textContent = matches.length;
-
-  document.getElementById(
-    "favoriteMatches"
-  ).textContent =
-    matches.filter(
-      m => m.favorite
-    ).length;
-
-  document.getElementById(
-    "watchedMatches"
-  ).textContent =
-    matches.filter(
-      m => m.watched
-    ).length;
-
-}
-
-// =====================
-// FAVORITES
-// =====================
+//////////////////////////////
+// FAVORITOS
+//////////////////////////////
 
 function toggleFavorite(id) {
+  favorites = favorites.includes(id)
+    ? favorites.filter(x => x !== id)
+    : [...favorites, id];
 
-  const match =
-    matches.find(
-      m => m.id === id
-    );
-
-  if (!match) return;
-
-  match.favorite =
-    !match.favorite;
-
-  save();
-
-  renderAll();
-
+  localStorage.setItem("favorites", JSON.stringify(favorites));
+  renderMatches(matches);
 }
 
-// =====================
-// WATCHED
-// =====================
+//////////////////////////////
+// VISTOS
+//////////////////////////////
 
 function toggleWatched(id) {
+  watched = watched.includes(id)
+    ? watched.filter(x => x !== id)
+    : [...watched, id];
 
-  const match =
-    matches.find(
-      m => m.id === id
-    );
+  localStorage.setItem("watched", JSON.stringify(watched));
+  renderMatches(matches);
+}
 
+//////////////////////////////
+// SHARE
+//////////////////////////////
+
+function shareMatch(id) {
+  const match = matches.find(m => m.id === id);
   if (!match) return;
 
-  match.watched =
-    !match.watched;
-
-  save();
-
-  renderAll();
-
-}
-
-// =====================
-// MATCH LIST
-// =====================
-
-function renderMatches() {
-
-  const container =
-    document.getElementById(
-      "matchList"
-    );
-
-  container.innerHTML = "";
-
-  const search =
-    document.getElementById(
-      "searchInput"
-    ).value
-      .toLowerCase();
-
-  matches
-
-    .filter(m =>
-
-      m.home.toLowerCase().includes(search)
-
-      ||
-
-      m.away.toLowerCase().includes(search)
-
-    )
-
-    .forEach(match => {
-
-      container.innerHTML += `
-
-        <div class="match-card">
-
-          <div class="match-info">
-
-            <div class="match-title">
-
-              ${match.home}
-
-              vs
-
-              ${match.away}
-
-            </div>
-
-            <div class="match-time">
-
-              📅 ${match.date}
-
-              ·
-
-              🕒 ${match.time}
-
-            </div>
-
-            <div>
-
-              🏟️
-
-              ${match.stadium}
-
-            </div>
-
-          </div>
-
-          <div class="match-actions">
-
-            <button
-              class="favorite"
-              onclick="toggleFavorite(${match.id})"
-            >
-
-              ${match.favorite ? "⭐" : "☆"}
-
-            </button>
-
-            <button
-              class="watched"
-              onclick="toggleWatched(${match.id})"
-            >
-
-              ${match.watched ? "👀" : "✔"}
-
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
+  if (navigator.share) {
+    navigator.share({
+      title: `${match.homeTeam} vs ${match.awayTeam}`,
+      text: `${match.stage} - ${match.city}`,
+      url: window.location.href
     });
-
+  }
 }
 
-// =====================
-// FAVORITE LIST
-// =====================
+//////////////////////////////
+// HELPERS
+//////////////////////////////
 
-function renderFavorites() {
+function hideSplash() {
+  const splash = document.getElementById("splash");
+  if (splash) {
+    setTimeout(() => splash.style.display = "none", 1000);
+  }
+}
+//////////////////////////////
+// WORLD CUP 2026 APP
+// PARTE 2/3 - FILTROS + BUSCADOR + CALENDARIO + NEXT MATCH + COUNTDOWN
+//////////////////////////////
 
-  const container =
-    document.getElementById(
-      "favoriteList"
-    );
+//////////////////////////////
+// FILTROS
+//////////////////////////////
 
-  container.innerHTML = "";
+function setupFilters() {
+  const container = document.querySelector(".filters-section");
+  if (!container) return;
 
-  matches
+  container.innerHTML = `
+    <select id="groupFilter">
+      <option value="ALL">Todos los grupos</option>
+      <option value="A">Grupo A</option>
+      <option value="B">Grupo B</option>
+      <option value="C">Grupo C</option>
+    </select>
 
-    .filter(
-      m => m.favorite
-    )
+    <button id="favoritesFilter">⭐ Favoritos</button>
+    <button id="watchedFilter">👁️ Vistos</button>
+    <button id="resetFilter">Reset</button>
+  `;
 
-    .forEach(match => {
+  const groupFilter = document.getElementById("groupFilter");
+  const favBtn = document.getElementById("favoritesFilter");
+  const watchedBtn = document.getElementById("watchedFilter");
+  const resetBtn = document.getElementById("resetFilter");
 
-      container.innerHTML += `
-
-        <div class="match-card">
-
-          <div class="match-title">
-
-            ⭐
-
-            ${match.home}
-
-            vs
-
-            ${match.away}
-
-          </div>
-
-        </div>
-
-      `;
-
-    });
-
+  groupFilter.addEventListener("change", () => applyFilters());
+  favBtn.addEventListener("click", () => filterFavorites());
+  watchedBtn.addEventListener("click", () => filterWatched());
+  resetBtn.addEventListener("click", () => renderMatches(matches));
 }
 
-// =====================
-// NOTIFICATIONS
-// =====================
+function applyFilters() {
+  const group = document.getElementById("groupFilter").value;
 
-function requestNotifications() {
+  let filtered = matches;
 
-  if (
-    "Notification" in window
-  ) {
-
-    Notification.requestPermission();
-
+  if (group !== "ALL") {
+    filtered = filtered.filter(m => m.group === group);
   }
 
+  renderMatches(filtered);
 }
 
-// =====================
-// MONTH NAV
-// =====================
-
-function prevMonth() {
-
-  currentDate.setMonth(
-    currentDate.getMonth() - 1
-  );
-
-  renderCalendar();
-
+function filterFavorites() {
+  const filtered = matches.filter(m => favorites.includes(m.id));
+  renderMatches(filtered);
 }
 
-function nextMonth() {
-
-  currentDate.setMonth(
-    currentDate.getMonth() + 1
-  );
-
-  renderCalendar();
-
+function filterWatched() {
+  const filtered = matches.filter(m => watched.includes(m.id));
+  renderMatches(filtered);
 }
 
-// =====================
-// CALENDAR
-// =====================
+//////////////////////////////
+// BUSCADOR
+//////////////////////////////
 
-function renderCalendar() {
+function setupSearch() {
+  const input = document.querySelector("input");
 
-  const title =
-    document.getElementById(
-      "monthTitle"
+  if (!input) return;
+
+  input.addEventListener("input", (e) => {
+    const value = e.target.value.toLowerCase();
+
+    const filtered = matches.filter(m =>
+      m.homeTeam.toLowerCase().includes(value) ||
+      m.awayTeam.toLowerCase().includes(value) ||
+      m.city.toLowerCase().includes(value) ||
+      m.stadium.toLowerCase().includes(value)
     );
 
-  title.textContent =
-    currentDate.toLocaleDateString(
-      "es-ES",
-      {
-        month: "long",
-        year: "numeric"
+    renderMatches(filtered);
+  });
+}
+
+//////////////////////////////
+// PRÓXIMO PARTIDO
+//////////////////////////////
+
+function getNextMatch() {
+  const now = new Date();
+
+  const future = matches
+    .filter(m => new Date(m.datetime) > now)
+    .sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
+
+  return future[0];
+}
+
+function showNextMatch() {
+  const next = getNextMatch();
+  const container = document.getElementById("nextMatchCard");
+
+  if (!next || !container) return;
+
+  container.innerHTML = `
+    <div>
+      <strong>Próximo partido</strong><br><br>
+      ${next.homeTeam} vs ${next.awayTeam}<br>
+      📍 ${next.city}<br>
+      🏟️ ${next.stadium}<br>
+      ⏰ ${new Date(next.datetime).toLocaleString("es-ES")}
+    </div>
+  `;
+}
+
+//////////////////////////////
+// COUNTDOWN
+//////////////////////////////
+
+function startCountdown() {
+  const container = document.getElementById("countdownCard");
+  if (!container) return;
+
+  setInterval(() => {
+    const next = getNextMatch();
+    if (!next) return;
+
+    const now = new Date();
+    const matchTime = new Date(next.datetime);
+
+    const diff = matchTime - now;
+
+    if (diff <= 0) {
+      container.innerHTML = "🔥 ¡Partido en juego!";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    container.innerHTML = `
+      ⏳ ${days}d ${hours}h ${minutes}m ${seconds}s
+    `;
+  }, 1000);
+}
+
+//////////////////////////////
+// CALENDARIO SIMPLE
+//////////////////////////////
+
+function buildCalendar() {
+  const calendar = document.getElementById("calendar");
+  if (!calendar) return;
+
+  const days = 30; // mes simple demo
+  calendar.innerHTML = "";
+
+  for (let i = 1; i <= days; i++) {
+    const day = document.createElement("div");
+    day.className = "day";
+
+    const hasMatch = matches.some(m =>
+      new Date(m.datetime).getDate() === i
+    );
+
+    if (hasMatch) day.classList.add("has-match");
+
+    day.innerHTML = `
+      <div class="day-number">${i}</div>
+      ${hasMatch ? "⚽ Partido" : ""}
+    `;
+
+    calendar.appendChild(day);
+  }
+}
+
+//////////////////////////////
+// INIT EXTRA
+//////////////////////////////
+
+document.addEventListener("DOMContentLoaded", () => {
+  setupFilters();
+  setupSearch();
+  showNextMatch();
+  buildCalendar();
+  startCountdown();
+});
+//////////////////////////////
+// WORLD CUP 2026 APP
+// PARTE 3/3 - PWA + OFFLINE + POLISH FINAL
+//////////////////////////////
+
+//////////////////////////////
+// PWA INSTALL PROMPT
+//////////////////////////////
+
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  showInstallButton();
+});
+
+function showInstallButton() {
+  const container = document.querySelector(".info-section");
+  if (!container) return;
+
+  const btn = document.createElement("button");
+  btn.textContent = "📲 Instalar App";
+
+  btn.style.marginTop = "15px";
+
+  btn.onclick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const choice = await deferredPrompt.userChoice;
+
+    if (choice.outcome === "accepted") {
+      console.log("App instalada");
+    }
+
+    deferredPrompt = null;
+  };
+
+  container.appendChild(btn);
+}
+
+//////////////////////////////
+// SERVICE WORKER (OFFLINE MODE)
+//////////////////////////////
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js")
+      .then(() => console.log("SW registrado"))
+      .catch(err => console.log("SW error", err));
+  });
+}
+
+//////////////////////////////
+// UI POLISH (MOBILE UX)
+//////////////////////////////
+
+function enableMobileUX() {
+  // Evita zoom raro en iOS al tocar botones
+  document.addEventListener("touchstart", () => {}, { passive: true });
+
+  // Scroll suave
+  document.documentElement.style.scrollBehavior = "smooth";
+}
+
+enableMobileUX();
+
+//////////////////////////////
+// AUTO UPDATE VIEW (LIVE APP STYLE)
+//////////////////////////////
+
+function autoRefreshMatches() {
+  setInterval(() => {
+    renderMatches(matches);
+    showNextMatch();
+  }, 60000); // cada 1 minuto
+}
+
+autoRefreshMatches();
+
+//////////////////////////////
+// DARK MODE READY HOOK (FUTURO)
+//////////////////////////////
+
+function toggleDarkMode() {
+  document.body.classList.toggle("dark");
+  localStorage.setItem(
+    "darkMode",
+    document.body.classList.contains("dark")
+  );
+}
+
+(function initTheme() {
+  const dark = localStorage.getItem("darkMode") === "true";
+  if (dark) document.body.classList.add("dark");
+})();
+
+//////////////////////////////
+// PERFORMANCE OPTIMIZATION
+//////////////////////////////
+
+function lazyRender() {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
       }
-    );
+    });
+  });
 
+  document.querySelectorAll(".match-card")
+    .forEach(el => observer.observe(el));
 }
 
-// =====================
-// RENDER
-// =====================
+//////////////////////////////
+// NOTIFICACIONES (OPCIONAL FUTURO)
+//////////////////////////////
 
-function renderAll() {
+function enableNotifications() {
+  if (!("Notification" in window)) return;
 
-  updateStats();
-
-  renderMatches();
-
-  renderFavorites();
-
-  renderCalendar();
-
+  Notification.requestPermission().then(permission => {
+    if (permission === "granted") {
+      console.log("Notificaciones activadas");
+    }
+  });
 }
 
-// =====================
-// INIT
-// =====================
+//////////////////////////////
+// FINAL INIT HOOKS
+//////////////////////////////
 
-window.addEventListener(
-  "load",
+document.addEventListener("DOMContentLoaded", () => {
+  enableMobileUX();
+  lazyRender();
+});
 
-  () => {
+//////////////////////////////
+// MINI SW FILE (CREADO EN JS PARA FACILIDAD)
+// ⚠️ EN PRODUCCIÓN DEBE IR EN sw.js
+//////////////////////////////
 
-    renderAll();
+const swCode = `
+const CACHE_NAME = "wc2026-cache-v1";
 
-    document
+const urlsToCache = [
+  "/",
+  "/index.html",
+  "/style.css",
+  "/script.js"
+];
 
-      .getElementById(
-        "searchInput"
-      )
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+  );
+});
 
-      .addEventListener(
-        "input",
-
-        renderMatches
-      );
-
-  }
-
-);
+self.addEventListener("fetch", event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
+`;
