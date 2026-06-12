@@ -1,12 +1,17 @@
-//////////////////////////////
-// ⚽ WORLD CUP PULSE 26 - UI PRO FIXED
-//////////////////////////////
+/* ⚽ WORLD CUP PULSE 26 - UI PRO FIXED */
+/* 🌍 GLOBAL RESET FIX */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-/* 🌍 BASE */
 body {
+  font-family: Arial, Helvetica, sans-serif;
   background: radial-gradient(circle at top, #0b1b3a, #050b18);
   overflow-x: hidden;
   position: relative;
+  color: white;
 }
 
 /* 🌊 BACKGROUND FX */
@@ -21,7 +26,7 @@ body::before {
   z-index: 0;
 }
 
-/* 🧱 GLOBAL LAYER FIX */
+/* 🧱 LAYERS FIX */
 .container {
   position: relative;
   z-index: 2;
@@ -29,35 +34,16 @@ body::before {
 
 /* 🌍 HERO */
 .hero {
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.08),
-    rgba(255,255,255,0.03)
-  );
+  background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
   backdrop-filter: blur(20px);
+  padding: 30px;
+  border-radius: 20px;
   position: relative;
   overflow: hidden;
   z-index: 2;
 }
 
-.hero::before {
-  content: "";
-  position: absolute;
-  width: 250%;
-  height: 250%;
-  top: -100%;
-  left: -100%;
-  background: radial-gradient(circle, rgba(255,213,74,0.10), transparent 60%);
-  animation: heroGlow 10s linear infinite;
-}
-
-@keyframes heroGlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* 🏆 TITLE */
 .hero h1 {
   font-size: 48px;
   background: linear-gradient(90deg, #ffd54a, #ffffff, #4fc3f7);
@@ -65,12 +51,26 @@ body::before {
   -webkit-text-fill-color: transparent;
 }
 
-/* ⚽ MATCH CARD */
+.hero p {
+  color: #cfe8ff;
+  margin-top: 10px;
+}
+
+/* ⚽ MATCH LIST */
+#matchList,
+#favoriteList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+/* 🎮 MATCH CARD */
 .match-card {
   background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 20px;
-  padding: 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  padding: 16px;
   position: relative;
   overflow: hidden;
   transition: 0.25s ease;
@@ -78,8 +78,8 @@ body::before {
 }
 
 .match-card:hover {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
   border-color: rgba(255,213,74,0.3);
 }
 
@@ -104,7 +104,25 @@ body::before {
   left: 120%;
 }
 
-/* ⚽ TEAMS */
+/* ⚽ INFO BLOCK */
+.match-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.match-location {
+  font-size: 14px;
+  color: #cfe8ff;
+}
+
+.match-time {
+  font-weight: bold;
+  color: white;
+}
+
+/* 🏳️ TEAMS */
 .teams {
   display: flex;
   justify-content: space-between;
@@ -115,39 +133,23 @@ body::before {
 .team {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: bold;
 }
 
 .team img {
-  width: 34px;
-  height: 22px;
-  border-radius: 5px;
+  width: 30px;
+  height: 20px;
+  border-radius: 4px;
   object-fit: cover;
 }
 
-/* VS */
 .vs {
-  font-weight: bold;
   color: #ffd54a;
-  font-size: 13px;
-}
-
-/* LOCATION */
-.match-location {
-  font-size: 14px;
-  color: #cfe8ff;
-  margin-top: 6px;
-}
-
-/* TIME */
-.match-time {
   font-weight: bold;
-  color: white;
-  margin-top: 4px;
 }
 
-/* 🗳️ POLL SAFE SELECTOR (FIX IMPORTANTE) */
+/* 🗳️ POLL */
 .poll {
   margin-top: 8px;
   font-size: 14px;
@@ -157,20 +159,19 @@ body::before {
 /* 🎮 BUTTONS */
 .match-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 12px;
-  flex-wrap: wrap;
 }
 
 button {
   background: rgba(255,255,255,0.08);
   color: white;
   border: 1px solid rgba(255,255,255,0.12);
-  padding: 10px 14px;
+  padding: 10px 12px;
   border-radius: 12px;
-  transition: 0.2s;
-  backdrop-filter: blur(10px);
   cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover {
@@ -186,11 +187,10 @@ button:hover {
   padding: 15px;
   border-radius: 18px;
   backdrop-filter: blur(12px);
-  position: relative;
   z-index: 2;
 }
 
-/* 📱 MOBILE */
+/* 🌍 HERO RESPONSIVE */
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 32px;
@@ -202,6 +202,6 @@ button:hover {
   }
 
   button {
-    flex: 1;
+    width: 100%;
   }
 }
