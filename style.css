@@ -205,3 +205,68 @@ button:hover {
     width: 100%;
   }
 }
+.match-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  padding: 16px;
+  transition: 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.match-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.06),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: 0.5s;
+}
+
+.match-card:hover::before {
+  transform: translateX(100%);
+}
+
+.match-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  border-color: rgba(255,213,74,0.3);
+}
+.live {
+  color: #ff3b3b;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+.hero h1 {
+  font-size: 46px;
+  background: linear-gradient(90deg, #ffd54a, #ffffff, #4fc3f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+button {
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 10px 14px;
+  border-radius: 12px;
+  transition: 0.2s;
+  backdrop-filter: blur(10px);
+}
+
+button:hover {
+  background: rgba(255,213,74,0.2);
+  transform: scale(1.05);
+}

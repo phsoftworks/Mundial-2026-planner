@@ -582,3 +582,9 @@ function randomEvent(matchId) {
     pushEvent(matchId, "info", "⏱️ Match update");
   }
 }
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const splash = document.getElementById("splash-screen");
+    if (splash) splash.classList.add("hidden");
+  }, 1200);
+});
