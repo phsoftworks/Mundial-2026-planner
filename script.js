@@ -795,3 +795,9 @@ function addHapticUI() {
 document.addEventListener("DOMContentLoaded", () => {
   enhanceUI();
 });
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const splash = document.getElementById("splash-screen");
+    splash.classList.add("hidden");
+  }, 1500);
+});
