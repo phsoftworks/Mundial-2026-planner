@@ -692,3 +692,13 @@ button:hover{
 .match-actions button {
   min-width: 120px;
 }
+.predictions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.rank-row {
+  padding: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
