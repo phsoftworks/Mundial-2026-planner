@@ -1,13 +1,33 @@
 //////////////////////////////
-// ⚽ WORLD CUP PULSE 26 - UI PRO
+// ⚽ WORLD CUP PULSE 26 - UI PRO FIXED
 //////////////////////////////
 
+/* 🌍 BASE */
 body {
   background: radial-gradient(circle at top, #0b1b3a, #050b18);
   overflow-x: hidden;
+  position: relative;
 }
 
-/* 🌍 HERO MÁS FIFA */
+/* 🌊 BACKGROUND FX */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,213,74,0.08), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(76,195,247,0.08), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 🧱 GLOBAL LAYER FIX */
+.container {
+  position: relative;
+  z-index: 2;
+}
+
+/* 🌍 HERO */
 .hero {
   background: linear-gradient(
     135deg,
@@ -18,34 +38,34 @@ body {
   backdrop-filter: blur(20px);
   position: relative;
   overflow: hidden;
+  z-index: 2;
 }
 
 .hero::before {
   content: "";
   position: absolute;
-  width: 300%;
-  height: 300%;
+  width: 250%;
+  height: 250%;
   top: -100%;
   left: -100%;
-  background: radial-gradient(circle, rgba(255,213,74,0.12), transparent 60%);
-  animation: heroGlow 8s infinite linear;
+  background: radial-gradient(circle, rgba(255,213,74,0.10), transparent 60%);
+  animation: heroGlow 10s linear infinite;
 }
 
 @keyframes heroGlow {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* 🏆 TITULO FIFA STYLE */
+/* 🏆 TITLE */
 .hero h1 {
   font-size: 48px;
   background: linear-gradient(90deg, #ffd54a, #ffffff, #4fc3f7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: 1px;
 }
 
-/* ⚽ MATCH CARD ULTRA PRO */
+/* ⚽ MATCH CARD */
 .match-card {
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.08);
@@ -53,7 +73,8 @@ body {
   padding: 18px;
   position: relative;
   overflow: hidden;
-  transition: 0.3s ease;
+  transition: 0.25s ease;
+  z-index: 2;
 }
 
 .match-card:hover {
@@ -62,7 +83,7 @@ body {
   border-color: rgba(255,213,74,0.3);
 }
 
-/* ✨ LIGHT SWEEP EFFECT */
+/* ✨ LIGHT SWEEP */
 .match-card::before {
   content: "";
   position: absolute;
@@ -73,7 +94,7 @@ body {
   background: linear-gradient(
     120deg,
     transparent,
-    rgba(255,255,255,0.08),
+    rgba(255,255,255,0.06),
     transparent
   );
   transition: 0.5s;
@@ -83,13 +104,12 @@ body {
   left: 120%;
 }
 
-/* ⚽ TEAMS BLOQUE PRO */
+/* ⚽ TEAMS */
 .teams {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin-bottom: 8px;
+  gap: 12px;
 }
 
 .team {
@@ -97,7 +117,6 @@ body {
   align-items: center;
   gap: 10px;
   font-weight: bold;
-  font-size: 16px;
 }
 
 .team img {
@@ -105,40 +124,37 @@ body {
   height: 22px;
   border-radius: 5px;
   object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* VS CENTRAL */
+/* VS */
 .vs {
   font-weight: bold;
   color: #ffd54a;
   font-size: 13px;
-  letter-spacing: 2px;
 }
 
-/* 📍 LOCATION */
+/* LOCATION */
 .match-location {
   font-size: 14px;
   color: #cfe8ff;
   margin-top: 6px;
 }
 
-/* ⏰ TIME */
+/* TIME */
 .match-time {
   font-weight: bold;
-  color: #ffffff;
+  color: white;
   margin-top: 4px;
-  letter-spacing: 0.5px;
 }
 
-/* 🏆 POLL BAR */
-.match-card > div:last-child {
+/* 🗳️ POLL SAFE SELECTOR (FIX IMPORTANTE) */
+.poll {
   margin-top: 8px;
   font-size: 14px;
   color: #ffd54a;
 }
 
-/* 🎮 BUTTONS PRO */
+/* 🎮 BUTTONS */
 .match-actions {
   display: flex;
   gap: 8px;
@@ -154,6 +170,7 @@ button {
   border-radius: 12px;
   transition: 0.2s;
   backdrop-filter: blur(10px);
+  cursor: pointer;
 }
 
 button:hover {
@@ -162,37 +179,26 @@ button:hover {
   border-color: #ffd54a;
 }
 
-/* 🏅 PROFILE CARD */
+/* 🏅 PROFILE */
 .profile-card {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
   padding: 15px;
   border-radius: 18px;
   backdrop-filter: blur(12px);
+  position: relative;
+  z-index: 2;
 }
 
-/* 🌊 BACKGROUND PARTICLES FEEL */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 20% 20%, rgba(255,213,74,0.08), transparent 40%),
-              radial-gradient(circle at 80% 80%, rgba(76,195,247,0.08), transparent 40%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* 📱 MOBILE PRO */
+/* 📱 MOBILE */
 @media (max-width: 768px) {
   .hero h1 {
     font-size: 32px;
   }
 
-  .team {
-    font-size: 14px;
+  .teams {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   button {
