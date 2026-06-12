@@ -215,7 +215,11 @@ function renderMatches(list) {
   list.forEach(match => {
     const card = document.createElement("div");
     card.className = "match-card";
-
+<div class="predictions">
+  <button onclick="predict(${match.id}, 'home')">🏠</button>
+  <button onclick="predict(${match.id}, 'draw')">🤝</button>
+  <button onclick="predict(${match.id}, 'away')">✈️</button>
+</div>
     if (favorites.includes(match.id)) card.classList.add("favorite");
     if (watched.includes(match.id)) card.classList.add("watched");
 
@@ -667,3 +671,165 @@ self.addEventListener("fetch", event => {
   );
 });
 `;
+//////////////////////////////
+// NOTIFICACIONES PRO
+//////////////////////////////
+
+function requestNotifications() {
+  if (!("Notification" in window)) return;
+
+  Notification.requestPermission();
+}
+
+function notifyMatch(match) {
+  new Notification("⚽ Partido del día", {
+    body: `${match.homeTeam} vs ${match.awayTeam} - ${match.city}`,
+  });
+}
+function getTodayMatches() {
+  const today = new Date().toISOString().split("T")[0];
+
+  return matches.filter(m =>
+    m.datetime.startsWith(today)
+  );
+}
+function dailyNotificationSystem() {
+  const last = localStorage.getItem("lastNotifDate");
+  const today = new Date().toISOString().split("T")[0];
+
+  if (last === today) return;
+
+  const todayMatches = getTodayMatches();
+
+  if (todayMatches.length > 0) {
+    todayMatches.forEach(m => notifyMatch(m));
+  }
+
+  localStorage.setItem("lastNotifDate", today);
+}
+document.addEventListener("DOMContentLoaded", () => {
+  requestNotifications();
+  dailyNotificationSystem();
+});
+let polls = JSON.parse(localStorage.getItem("polls")) || {};
+
+function initPoll(matchId) {
+  if (!polls[matchId]) {
+    polls[matchId] = {
+      home: 0,
+      draw: 0,
+      away: 0,
+      users: {}
+    };
+  }
+}
+
+function vote(matchId, type, user = "anon") {
+  initPoll(matchId);
+
+  polls[matchId][type]++;
+
+  polls[matchId].users[user] = type;
+
+  localStorage.setItem("polls", JSON.stringify(polls));
+
+  renderMatches(matches);
+}
+function getPoll(matchId) {
+  initPoll(matchId);
+  return polls[matchId];
+}
+
+function getPollUI(matchId) {
+  const p = getPoll(matchId);
+  const total = p.home + p.draw + p.away || 1;
+
+  return `
+    🏠 ${Math.round(p.home / total * 100)}%
+    🤝 ${Math.round(p.draw / total * 100)}%
+    ✈️ ${Math.round(p.away / total * 100)}%
+  `;
+}
+{
+  id: 1,
+  group: "A",
+  homeTeam: "Mexico",
+  awayTeam: "South Africa",
+  datetime: "2026-06-11T15:00:00",
+  stadium: "Estadio Azteca",
+  city: "Mexico City",
+  stage: "Group Stage"
+}
+//////////////////////////////
+// LIGA PRO - USUARIOS
+//////////////////////////////
+
+let user = localStorage.getItem("user") || prompt("Tu nombre de jugador:");
+localStorage.setItem("user", user);
+
+let league = localStorage.getItem("league") || prompt("Código de tu liga (ej: FRIENDS1):");
+localStorage.setItem("league", league);
+let leagueData = JSON.parse(localStorage.getItem("leagueData")) || {
+  users: {},
+  predictions: {}
+};
+function predict(matchId, choice) {
+  if (!leagueData.predictions[matchId]) {
+    leagueData.predictions[matchId] = {};
+  }
+
+  leagueData.predictions[matchId][user] = choice;
+
+  saveLeague();
+}
+function saveLeague() {
+  localStorage.setItem("leagueData", JSON.stringify(leagueData));
+}
+const results = {
+  1: "home",
+  2: "away",
+  3: "draw"
+};
+function calculatePoints() {
+  const points = {};
+
+  Object.keys(leagueData.predictions).forEach(matchId => {
+    const real = results[matchId];
+
+    const preds = leagueData.predictions[matchId];
+
+    Object.keys(preds).forEach(u => {
+      if (!points[u]) points[u] = 0;
+
+      if (preds[u] === real) {
+        points[u] += 3; // acierto
+      }
+    });
+  });
+
+  return points;
+}
+function getRanking() {
+  const points = calculatePoints();
+
+  const sorted = Object.entries(points)
+    .sort((a, b) => b[1] - a[1]);
+
+  return sorted;
+}
+function renderRanking() {
+  const container = document.getElementById("ranking");
+
+  if (!container) return;
+
+  const ranking = getRanking();
+
+  container.innerHTML = `
+    <h3>🏆 Ranking Liga: ${league}</h3>
+    ${ranking.map(([name, pts], i) => `
+      <div class="rank-row">
+        <b>${i + 1}. ${name}</b> - ${pts} pts
+      </div>
+    `).join("")}
+  `;
+}
