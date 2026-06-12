@@ -840,3 +840,175 @@ document.addEventListener("DOMContentLoaded", () => {
     renderRanking();
   }, 5000);
 });
+let user = localStorage.getItem("user") || prompt("Tu nombre:");
+localStorage.setItem("user", user);
+
+let league = localStorage.getItem("league") || prompt("Código liga (ej: WCFRIENDS):");
+localStorage.setItem("league", league);
+
+let db = JSON.parse(localStorage.getItem("db")) || {
+  leagues: {}
+};
+
+if (!db.leagues[league]) {
+  db.leagues[league] = {
+    users: [],
+    predictions: {},
+    polls: {}
+  };
+}
+function predict(matchId, pick) {
+  const l = db.leagues[league];
+
+  if (!l.predictions[matchId]) {
+    l.predictions[matchId] = {};
+  }
+
+  l.predictions[matchId][user] = pick;
+
+  saveDB();
+}
+function votePoll(matchId, option) {
+  const l = db.leagues[league];
+
+  if (!l.polls[matchId]) {
+    l.polls[matchId] = { home: 0, draw: 0, away: 0 };
+  }
+
+  l.polls[matchId][option]++;
+
+  saveDB();
+}
+const results = {}; // luego API real
+
+function getPoints() {
+  const l = db.leagues[league];
+  const points = {};
+
+  for (let matchId in l.predictions) {
+    const real = results[matchId];
+
+    for (let u in l.predictions[matchId]) {
+      if (!points[u]) points[u] = 0;
+
+      if (l.predictions[matchId][u] === real) {
+        points[u] += 3;
+      }
+    }
+  }
+
+  return points;
+}
+function getRanking() {
+  return Object.entries(getPoints())
+    .sort((a, b) => b[1] - a[1]);
+}
+function saveDB() {
+  localStorage.setItem("db", JSON.stringify(db));
+}
+function notifyTodayMatches() {
+  const today = new Date().toISOString().split("T")[0];
+
+  const todayMatches = matches.filter(m =>
+    m.datetime.startsWith(today)
+  );
+
+  if (!todayMatches.length) return;
+
+  if (Notification.permission === "granted") {
+    todayMatches.forEach(m => {
+      new Notification("⚽ Partido hoy", {
+        body: `${m.homeTeam} vs ${m.awayTeam}`
+      });
+    });
+  }
+}
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js");
+}
+
+function initApp() {
+  notifyTodayMatches();
+}
+document.addEventListener("DOMContentLoaded", () => {
+  initApp();
+  renderMatches(matches);
+  renderRanking?.();
+});
+let user = localStorage.getItem("user") || prompt("Tu nombre:");
+localStorage.setItem("user", user);
+
+let league = localStorage.getItem("league") || prompt("Código liga (ej: WC2026):");
+localStorage.setItem("league", league);
+
+let db = JSON.parse(localStorage.getItem("db")) || {
+  leagues: {}
+};
+
+if (!db.leagues[league]) {
+  db.leagues[league] = {
+    users: [],
+    predictions: {},
+    polls: {}
+  };
+}
+
+if (!db.leagues[league].users.includes(user)) {
+  db.leagues[league].users.push(user);
+}
+function predict(matchId, pick) {
+  const l = db.leagues[league];
+
+  if (!l.predictions[matchId]) {
+    l.predictions[matchId] = {};
+  }
+
+  l.predictions[matchId][user] = pick;
+
+  saveDB();
+}
+function votePoll(matchId, option) {
+  const l = db.leagues[league];
+
+  if (!l.polls[matchId]) {
+    l.polls[matchId] = { home: 0, draw: 0, away: 0 };
+  }
+
+  l.polls[matchId][option]++;
+
+  saveDB();
+}
+function saveDB() {
+  localStorage.setItem("db", JSON.stringify(db));
+}
+function getPoints() {
+  const l = db.leagues[league];
+  const points = {};
+
+  const results = {}; // luego lo actualizamos
+
+  for (let matchId in l.predictions) {
+    const real = results[matchId];
+
+    for (let u in l.predictions[matchId]) {
+      if (!points[u]) points[u] = 0;
+
+      if (l.predictions[matchId][u] === real) {
+        points[u] += 3;
+      }
+    }
+  }
+
+  return Object.entries(points)
+    .sort((a, b) => b[1] - a[1]);
+}
+function exportLeague() {
+  const data = JSON.stringify(db);
+  prompt("Copia esto para compartir liga:", data);
+}
+
+function importLeague() {
+  const data = prompt("Pega la liga:");
+  db = JSON.parse(data);
+  saveDB();
+}
