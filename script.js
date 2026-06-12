@@ -833,3 +833,10 @@ function renderRanking() {
     `).join("")}
   `;
 }
+document.addEventListener("DOMContentLoaded", () => {
+  renderRanking();
+
+  setInterval(() => {
+    renderRanking();
+  }, 5000);
+});
