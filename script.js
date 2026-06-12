@@ -241,7 +241,13 @@ function renderMatches() {
   if (!el) return;
 
   el.innerHTML = "";
+const events = onlineDB[state.leagueId]?.events?.[m.id] || [];
 
+const eventHTML = events.slice(-2).map(e => `
+  <div style="font-size:12px;opacity:0.9;">
+    ${e.text}
+  </div>
+`).join("");
   state.matches.forEach(m => {
     const card = document.createElement("div");
     card.className = "match-card";
@@ -262,6 +268,7 @@ const scoreHTML = live
             <img src="${m.homeFlag}">
             ${m.homeTeam}
             ${scoreHTML}
+            ${eventHTML}
           </div>
 
           <div class="vs">VS</div>
@@ -530,10 +537,48 @@ function simulateGoal(matchId) {
   showToast(`⚽ ¡GOOOOOOL! ${side.toUpperCase()}`);
 }
 setInterval(() => {
-  const randomMatch =
+  const liveMatch =
     state.matches[Math.floor(Math.random() * state.matches.length)];
 
-  if (Math.random() > 0.7) {
-    simulateGoal(randomMatch.id);
+  if (Math.random() > 0.65) {
+    randomEvent(liveMatch.id);
   }
-}, 15000);
+
+  loadOnline();
+  renderMatches();
+}, 12000);
+//////////////////////////////
+// ⚽ LIVE EVENTS ENGINE
+//////////////////////////////
+
+function pushEvent(matchId, type, text) {
+  const league = onlineDB[state.leagueId];
+
+  if (!league.events) league.events = {};
+  if (!league.events[matchId]) league.events[matchId] = [];
+
+  league.events[matchId].push({
+    type,
+    text,
+    time: new Date().toISOString()
+  });
+
+  saveOnline();
+}
+function randomEvent(matchId) {
+  const r = Math.random();
+
+  if (r < 0.6) {
+    simulateGoal(matchId);
+    pushEvent(matchId, "goal", "⚽ GOAL!");
+  }
+
+  else if (r < 0.8) {
+    pushEvent(matchId, "card", "🟨 Yellow Card");
+    showToast("🟨 Tarjeta amarilla");
+  }
+
+  else {
+    pushEvent(matchId, "info", "⏱️ Match update");
+  }
+}
